@@ -1,0 +1,7 @@
+1. npm install and composer install
+2. migrate tables and run seeders
+3. login with created user email
+4. get login token and paste Subscribe to Website request in Website Collection
+5. logout
+6. repeat 1,2,3,4,5 for all users
+7. create posts and check Mailtrap 
