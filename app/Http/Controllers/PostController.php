@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Traits\ValidatesPost;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class PostController extends Controller
 {
@@ -25,11 +26,6 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -47,6 +43,19 @@ class PostController extends Controller
     {
         $posts = $post::with('website')->get()->toArray();
         return $this->responseService->responseJson($posts, 200);
+    }
+
+    public function recent(Post $post): JsonResponse
+    {
+        $recentPosts = Cache::remember('recent_posts', 60, function () use ($post) {
+            return $post::with('website')
+                ->latest()
+                ->take(5)
+                ->get()
+                ->toArray();
+        });
+
+        return $this->responseService->responseJson($recentPosts, 200);
     }
 
     /**

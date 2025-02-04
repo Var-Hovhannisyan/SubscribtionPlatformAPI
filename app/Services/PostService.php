@@ -7,6 +7,7 @@ use App\Interfaces\SendMailInterface;
 use App\Models\Post;
 use App\Models\Website;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class PostService implements PostInterface
@@ -37,7 +38,7 @@ class PostService implements PostInterface
                     });
                 }
             }
-
+            Cache::forget('recent_posts');
             return response()->json([
                 'message' => 'Post created & notification queued',
                 'post' => $post

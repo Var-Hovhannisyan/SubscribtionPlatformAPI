@@ -8,6 +8,7 @@ use App\Models\Website;
 use App\Traits\ValidatesWebsite;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class WebsiteController extends Controller
 {
@@ -34,7 +35,9 @@ class WebsiteController extends Controller
      */
     public function show(Website $website): JsonResponse
     {
-        $websites = $website::with('posts')->with('subscribers')->get()->toArray();
+        $websites = Cache::remember('websites', now()->addMinutes(10), function () use ($website) {
+           return $website::with('posts')->with('subscribers')->get()->toArray();
+        });
         return $this->responseService->responseJson($websites, 200);
     }
 

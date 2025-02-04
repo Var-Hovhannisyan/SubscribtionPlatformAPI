@@ -9,13 +9,10 @@ use App\Http\Controllers\WebsiteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [Home::class, 'index']);
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::apiResource('websites', WebsiteController::class);
 Route::post('/website', [WebsiteController::class, 'store']);
 Route::get('/websites', [WebsiteController::class, 'show']);
 Route::post('/websites/{website}/subscribe', [SubscriptionController::class, 'subscribe'])->middleware('auth:sanctum');
@@ -23,9 +20,7 @@ Route::post('/websites/{website}/subscribe', [SubscriptionController::class, 'su
 
 Route::post('/post', [PostController::class, 'store']);
 Route::get('/posts', [PostController::class, 'show']);
-
-
-
+Route::get('posts/recent', [PostController::class, 'recent']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/{id}', [UserController::class, 'show']); // Get user by ID
