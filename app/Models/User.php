@@ -53,4 +53,6 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Website::class, 'subscriptions')->withTimestamps();
     }
+
+
 }

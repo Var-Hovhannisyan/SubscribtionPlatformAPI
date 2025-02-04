@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
         $subscriptionService = app(SubscriptionService::class);
 
         // Create 10 fake users
-        User::factory(10)->create()->each(function ($user) use ($subscriptionService) {
+        User::factory(3)->create()->each(function ($user) use ($subscriptionService) {
             // Select a random website from the database
             $website = Website::inRandomOrder()->first();
 

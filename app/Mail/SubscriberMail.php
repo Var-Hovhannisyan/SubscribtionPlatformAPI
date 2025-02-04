@@ -12,15 +12,16 @@ use Illuminate\Queue\SerializesModels;
 class SubscriberMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $details;
+    public $post;
+    public $subscriber;
     /**
      * Create a new message instance.
      */
-    public function __construct($details)
+    public function __construct($post, $subscriber)
     {
-        $this->details = $details;
+        $this->post = $post;
+        $this->subscriber = $subscriber;
     }
-
     /**
      * Get the message envelope.
      */
@@ -36,9 +37,10 @@ class SubscriberMail extends Mailable
      */
     public function content(): Content
     {
+
         return new Content(
             view: 'mails.subscriber_mail',
-            with: ['details' => $this->details]
+            with: ['post' => $this->post, 'subscriber' => $this->subscriber]
         );
     }
 

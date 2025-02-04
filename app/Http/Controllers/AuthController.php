@@ -54,6 +54,6 @@ class AuthController extends Controller
     public function logout(Request $request) :JsonResponse
     {
         $request->user()->tokens()->delete();
-        return response()->json(['message' => 'Вы вышли из системы']);
+        return response()->json(['message' => 'You are logged out.']);
     }
 }
