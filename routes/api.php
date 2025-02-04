@@ -15,12 +15,13 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
+Route::apiResource('websites', WebsiteController::class);
 Route::post('/website', [WebsiteController::class, 'store']);
 Route::get('/websites', [WebsiteController::class, 'show']);
 Route::post('/websites/{website}/subscribe', [SubscriptionController::class, 'subscribe'])->middleware('auth:sanctum');
 
 
-Route::post('/post', [PostController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/post', [PostController::class, 'store']);
 Route::get('/posts', [PostController::class, 'show']);
 
 

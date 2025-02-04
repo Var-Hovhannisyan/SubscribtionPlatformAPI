@@ -21,14 +21,6 @@ class WebsiteController extends Controller
         $this->websiteService = $websiteService;
     }
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request): JsonResponse
@@ -42,17 +34,10 @@ class WebsiteController extends Controller
      */
     public function show(Website $website): JsonResponse
     {
-        $websites = $website::with('posts')->get()->toArray();
+        $websites = $website::with('posts')->with('subscribers')->get()->toArray();
         return $this->responseService->responseJson($websites, 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Website $website)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

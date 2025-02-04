@@ -4,11 +4,13 @@ namespace App\Providers;
 
 use App\Interfaces\Custom\ResponseInterface;
 use App\Interfaces\PostInterface;
+use App\Interfaces\SendMailInterface;
 use App\Interfaces\SubscriptionServiceInterface;
 use App\Interfaces\UserInterface;
 use App\Interfaces\WebsiteInterface;
 use App\Services\Custom\Response;
 use App\Services\PostService;
+use App\Services\SendMailService;
 use App\Services\SubscriptionService;
 use App\Services\UserService;
 use App\Services\WebsiteService;
@@ -26,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SubscriptionServiceInterface::class, SubscriptionService::class);
         $this->app->bind(PostInterface::class, PostService::class);
         $this->app->bind(WebsiteInterface::class, WebsiteService::class);
-
+        $this->app->bind(SendMailInterface::class, SendMailService::class);
     }
 
     /**

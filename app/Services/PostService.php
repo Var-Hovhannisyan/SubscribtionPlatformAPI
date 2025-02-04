@@ -3,42 +3,47 @@
 namespace App\Services;
 
 use App\Interfaces\PostInterface;
-use App\Models\User;
+use App\Interfaces\SendMailInterface;
+use App\Models\Post;
+use App\Models\Website;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 class PostService implements PostInterface
 {
-    public function createPost(User $user, array $postData): JsonResponse
+    protected $mailService;
+
+    public function __construct(SendMailInterface $mailService)
+    {
+        $this->mailService = $mailService;
+    }
+
+    public function createPost(array $postData): JsonResponse
     {
         try {
-            // Attach post to websites if provided
-            if (!empty($postData['website_ids'])) {
-                //User's subscribed website ids
-                $subscribedWebsiteIds = $user->websites()->pluck('websites.id')->toArray();
+            $post = Post::create($postData);
 
-                //Filter and Get Only subscribed website IDs
-                $validWebsiteIds = array_intersect($postData['website_ids'], $subscribedWebsiteIds);
+            if (isset($postData['website_id'])) {
+                $website = Website::find($postData['website_id']);
+                if ($website) {
+                    $post->website()->associate($website);
+                    $post->save();
 
-                if (!empty($validWebsiteIds)) {
-                    $post = $user->posts()->create([
-                        'title' => $postData['title'],
-                        'description' => $postData['description'],
-                    ]);
-
-                    $post->websites()->attach($validWebsiteIds);
-                }else {
-                    throw new \Exception('Please subscribe to website for adding post');
+                    // Dispatch email sending via queue
+                    dispatch(function () use ($post) {
+                        foreach ($post->website->subscribers as $subscriber) {
+                            $this->mailService->sendMail($post, $subscriber->id);
+                        }
+                    });
                 }
             }
 
             return response()->json([
-                'message' => 'Post created successfully.',
+                'message' => 'Post created & notification queued',
                 'post' => $post
             ], 201);
         } catch (\Throwable $exception) {
-            Log::error('Post creation failed', [
-                'user_id' => $user->id,
+            Log::error('Error creating post', [
                 'error' => $exception->getMessage()
             ]);
 

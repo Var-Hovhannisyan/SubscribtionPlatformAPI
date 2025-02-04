@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Website extends Model
 {
@@ -15,13 +16,15 @@ class Website extends Model
         'url'
     ];
 
-    public function subscribers(): BelongsToMany
+    public function posts(): HasMany
     {
-        return $this->belongsToMany(User::class, 'user_website')->withTimestamps();
+        return $this->hasMany(Post::class);
     }
 
-    public function posts(): BelongsToMany
+    public function subscribers(): BelongsToMany
     {
-        return $this->belongsToMany(Post::class, 'post_website');
+        return $this->belongsToMany(User::class, 'subscriptions')->withTimestamps();
     }
+
+
 }

@@ -31,20 +31,12 @@ class PostController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request): JsonResponse
     {
         $validated = $this->validatePostRequest($request);
-        return $this->postService->createPost($request->user(), $validated);
+        return $this->postService->createPost($validated);
     }
 
 
@@ -53,16 +45,8 @@ class PostController extends Controller
      */
     public function show(Post $post): JsonResponse
     {
-        $posts = $post::with('websites')->get()->toArray();
+        $posts = $post::with('website')->get()->toArray();
         return $this->responseService->responseJson($posts, 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Post $post)
-    {
-        //
     }
 
     /**

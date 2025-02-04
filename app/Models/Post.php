@@ -2,25 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Post extends Model
 {
+    use HasFactory;
     protected $fillable = [
-        'user_id',
         'title',
-        'description'
+        'description',
+        'website_id'
     ];
 
-    public function user(): BelongsTo
+    public function website(): BelongsTo
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function websites(): BelongsToMany
-    {
-        return $this->belongsToMany(Website::class, 'post_website')->withTimestamps();
+        return $this->belongsTo(Website::class);
     }
 }

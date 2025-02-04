@@ -14,8 +14,7 @@ trait ValidatesPost
         return $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:500',
-            'website_ids' => ['required', 'array'],
-            'website_ids.*' => ['exists:websites,id'],
+            'website_id' => ['required', 'integer', 'exists:websites,id'],
         ]);
     }
 }

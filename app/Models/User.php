@@ -49,13 +49,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function websites(): BelongsToMany
+    public function subscriptions(): BelongsToMany
     {
-        return $this->belongsToMany(Website::class, 'user_website')->withTimestamps();
-    }
-
-    public function posts(): HasMany
-    {
-        return $this->hasMany(Post::class);
+        return $this->belongsToMany(Website::class, 'subscriptions')->withTimestamps();
     }
 }

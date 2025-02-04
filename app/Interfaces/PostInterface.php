@@ -7,5 +7,5 @@ use Illuminate\Http\JsonResponse;
 
 interface PostInterface
 {
-    public function createPost(User $user, array $postData): JsonResponse;
+    public function createPost(array $postData): JsonResponse;
 }
