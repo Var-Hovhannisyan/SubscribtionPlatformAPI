@@ -16,11 +16,6 @@ class Website extends Model
         'url'
     ];
 
-    public function posts(): HasMany
-    {
-        return $this->hasMany(Post::class);
-    }
-
     public function subscribers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'subscriptions')->withTimestamps();

@@ -44,22 +44,6 @@ class PostService implements PostInterface
                 if ($website) {
                     $post->website()->associate($website);
                     $post->save();
-
-                    // Dispatch email sending via queue for subscribers
-                    foreach ($post->website->subscribers as $subscriber) {
-                        $existingRecord = DB::table('post_subscriber')
-                            ->where('post_id', $post->id)
-                            ->where('user_id', $subscriber->id)
-                            ->first();
-
-                        if ($existingRecord) {
-                            // Skip sending email if already sent
-                            Log::info('Email already sent to subscriber ' . $subscriber->id . ' for post ' . $post->id);
-                        } else {
-                            // Dispatch job to send email
-                            dispatch(new SendEmailToSubscribers($post, $subscriber->id));
-                        }
-                    }
                 }
             }
 
@@ -67,7 +51,7 @@ class PostService implements PostInterface
             Cache::forget('recent_posts');
 
             return response()->json([
-                'message' => 'Post created & notification queued',
+                'message' => 'Post created',
                 'post' => $post
             ], 201);
         } catch (\Throwable $exception) {
